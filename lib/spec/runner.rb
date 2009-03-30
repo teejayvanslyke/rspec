@@ -15,7 +15,9 @@ module Spec
     
     class ExampleGroupCreationListener
       def register_example_group(klass)
-        Spec::Runner.options.add_example_group klass
+        if Spec::Runner.autorun?
+          Spec::Runner.options.add_example_group klass
+        end
       end
     end
     
@@ -42,10 +44,12 @@ module Spec
       end
       
       def autorun # :nodoc:
+        @autorun = true
         at_exit {exit run unless $!}
       end
 
       def options # :nodoc:
+        return nil unless autorun?
         @options ||= begin
           parser = ::Spec::Runner::OptionParser.new($stderr, $stdout)
           parser.order!(ARGV)
@@ -60,6 +64,10 @@ module Spec
       def run
         return true if options.examples_run?
         options.run_examples
+      end
+      
+      def autorun?
+        defined?(@autorun) && @autorun
       end
 
     end

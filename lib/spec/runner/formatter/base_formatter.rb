@@ -8,7 +8,7 @@ module Spec
         # formatters that need to provide progress on feedback (graphical ones)
         #
         # This method will only be invoked once, and the next one to be invoked
-        # is #add_example_group
+        # is #example_group_started
         def start(example_count)
         end
 
@@ -16,7 +16,13 @@ module Spec
         # +example_group_proxy+ is an instance of Spec::Example::ExampleGroupProxy.
         #
         # The next method to be invoked after this is #example_started
+        def example_group_started(example_group_proxy)
+        end
+        
+        # Deprecated - use example_group_started instead
         def add_example_group(example_group_proxy)
+          Spec.deprecate("BaseFormatter#add_example_group", "BaseFormatter#example_group_started")
+          example_group_started(example_group_proxy)
         end
 
         # This method is invoked when an +example+ starts.
@@ -45,12 +51,9 @@ module Spec
         # This method is invoked when an example is not yet implemented (i.e. has not
         # been provided a block), or when an ExamplePendingError is raised.
         # +message+ is the message from the ExamplePendingError, if it exists, or the
-        # default value of "Not Yet Implemented"
-        # +pending_caller+ is the file and line number of the spec which
-        # has called the pending method
-        # +example_proxy+ is the same instance of Spec::Example::ExampleProxy
-        # that was passed to example_started
-        def example_pending(example_proxy, message, pending_caller)
+        # default value of "Not Yet Implemented". +deprecated_pending_location+ is
+        # deprecated - use example_proxy.location instead
+        def example_pending(example_proxy, message, deprecated_pending_location=nil)
         end
 
         # This method is invoked after all of the examples have executed. The next method
@@ -69,7 +72,7 @@ module Spec
         def dump_summary(duration, example_count, failure_count, pending_count)
         end
         
-        # This gets invoked after the summary if option is set to do so.
+        # This gets invoked after the summary
         def dump_pending
         end
 

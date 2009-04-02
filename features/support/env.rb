@@ -28,7 +28,7 @@ class RspecWorld
   end
 
   def self.rspec_lib
-    @rspec_lib ||= File.expand_path(File.join(File.dirname(__FILE__), "/../../lib"))
+    @rspec_lib ||= File.join(working_dir, "/../../lib")
   end
 
   def spec(args)
@@ -68,12 +68,11 @@ class RspecWorld
     @exit_code = $?.to_i
   end
 
-
 end
 
 Before do
-  FileUtils.rm_rf RspecWorld.working_dir if test ?d, RspecWorld.working_dir
-  FileUtils.mkdir RspecWorld.working_dir
+  FileUtils.rm_rf   RspecWorld.working_dir if test ?d, RspecWorld.working_dir
+  FileUtils.mkdir_p RspecWorld.working_dir
 end
 
 World do

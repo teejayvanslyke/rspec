@@ -24,12 +24,12 @@ module Spec
           @pending_examples = []
         end
 
-        def add_example_group(example_group_proxy)
+        def example_group_started(example_group_proxy)
           @example_group = example_group_proxy
         end
         
-        def example_pending(example, message, pending_caller)
-          @pending_examples << ["#{@example_group.description} #{example.description}", message, pending_caller]
+        def example_pending(example, message, ignore)
+          @pending_examples << ["#{@example_group.description} #{example.description}", message, example.location]
         end
         
         def dump_failure(counter, failure)
@@ -45,12 +45,7 @@ module Spec
         end
         
         def colourise(message, failure)
-          Kernel.warn <<-NOTICE
-DEPRECATED: BaseTextFormatter#colourise is deprecated and will be
-removed from a future version of RSpec.
-
-Please use colorize_failure instead.
-NOTICE
+          Spec::deprecate("BaseTextFormatter#colourise", "colorize_failure")
           colorize_failure(message, failure)
         end
         
@@ -131,12 +126,9 @@ NOTICE
         def red(text); colour(text, "\e[31m"); end
         def yellow(text); colour(text, "\e[33m"); end
         def blue(text); colour(text, "\e[34m"); end
-
+        
         def magenta(text)
-          Kernel.warn <<-NOTICE
-DEPRECATED: BaseTextFormatter#magenta is deprecated and will be
-removed from a future version of RSpec.
-NOTICE
+          Spec::deprecate("BaseTextFormatter#magenta")
           red(text)
         end
       end

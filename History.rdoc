@@ -1,9 +1,22 @@
-=== Master in git
+=== Version 1.2.3 (in git)
+
+* deprecations
+
+  * BaseFormatter#add_example_group (use #example_group_started instead)
+  * ExampleGroupProxy#backtrace (use #location instead)
+  * BaseFormatter#example_pending now expects two arguments. The third
+    argument is deprecated.
 
 * enhancements
 
-  * support for specifying single examples with colon syntax. Closes #712. (Ben Mabey)
-    * you can now say "spec some_spec.rb:12" in addition to "spec some_spec.rb --line 12"
+  * support for specifying single examples with colon syntax. Closes #712.
+    (Ben Mabey)
+    * you can now say "spec some_spec.rb:12" in addition to "spec some_spec.rb
+      --line 12"
+
+* bug fixes
+
+  * support expectations on DelegateClass (Clifford T. Matthews). Closes #48.
 
 === Version 1.2.2 / 2009-03-22
 

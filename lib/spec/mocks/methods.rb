@@ -17,7 +17,9 @@ module Spec
         end
       end
 
-      def stub_chain!(array)
+      def stub_chain!(*args)
+        array = (Array === args.first ? args.first : args)
+
         mock = Mock.new(array[0])
 
         stub!(array[0]).and_return(mock)

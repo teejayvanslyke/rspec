@@ -17,10 +17,16 @@ module Spec
         end
       end
 
-      def stub_chain!(*array)
+      def stub_chain!(array)
         mock = Mock.new(array[0])
+
         stub!(array[0]).and_return(mock)
-        mock.stub!(array[1])
+
+        if array.size > 1
+          mock.stub_chain!(array[1..array.size-1])
+         else
+           stub!(array[0])
+        end
       end
       
       def received_message?(sym, *args, &block) #:nodoc:

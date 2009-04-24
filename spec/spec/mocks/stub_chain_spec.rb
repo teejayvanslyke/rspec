@@ -35,6 +35,18 @@ module Spec
         @instance.rspec_verify
       end
 
+      it "should return expected value when matching the specified argument filter" do
+        @instance.stub_chain!({:msg1 => [ :arg1, :arg2 ]}, :msg2, :msg3).and_return(:return_value)
+        @instance.msg1(:arg1, :arg2).msg2.msg3.should equal(:return_value)
+        @instance.rspec_verify
+      end
+
+      it "should raise when stub chain is called with arguments different from those specified in the filter" do
+        @instance.stub_chain!({:msg1 => [ :arg1, :arg2 ]}, :msg2, :msg3).and_return(:return_value)
+        lambda { @instance.msg1(:arg1).msg2.msg3 }.should raise_error
+        @instance.rspec_verify
+      end
+
     end
   end
 end

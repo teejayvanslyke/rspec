@@ -17,17 +17,31 @@ module Spec
         end
       end
 
-      def stub_chain!(*args)
-        array = (Array === args.first ? args.first : args)
+      def stub_chain!(*array)
+        if Hash === array[0]
+          method    = array[0].keys.first
+          arguments = array[0][method]
+        else
+          method    = array[0]
+          arguments = nil
+        end
 
-        mock = Mock.new(array[0])
+        mock = Mock.new(method)
 
-        stub!(array[0]).and_return(mock)
+        if arguments
+          stub!(method).with(*arguments).and_return(mock)
+        else
+          stub!(method).and_return(mock)
+        end
 
         if array.size > 1
-          mock.stub_chain!(array[1..array.size-1])
+          mock.stub_chain!(*array[1..array.size-1])
          else
-           stub!(array[0])
+          if arguments
+            stub!(method).with(*arguments)
+          else
+            stub!(method)
+          end
         end
       end
       
